@@ -2,14 +2,20 @@ import QrReader from "react-qr-reader";
 import { useState, useEffect } from "react";
 import { Toast, WingBlank, Button } from "antd-mobile";
 
-const QRView = ({ handleUser, setIsScanning }) => {
+const QRView = ({ scanVoucher, setIsScanning, setShowModal }) => {
   const handleScan = async (data) => {
     if (data) {
       Toast.loading("Loading...", 0);
 
-      console.log(data)
+      console.log(data);
 
-      // await handleUser(data);
+      try {
+        const result = await scanVoucher(data);
+      } catch (e) {
+        console.log(e);
+      }
+
+      setShowModal(true);
 
       Toast.hide();
     }

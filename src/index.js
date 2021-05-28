@@ -7,12 +7,12 @@ import { SWRConfig } from "swr";
 import { BrowserRouter } from "react-router-dom";
 import { Client as Styletron } from "styletron-engine-atomic";
 import { Provider as StyletronProvider, DebugEngine } from "styletron-react";
-import axios from "axios";
+import client from "./network/request";
 
 const fetcher = async (...args) => {
   const url = args[0];
 
-  return axios.get(url).then((res) => res.data);
+  return client.get(url).then((res) => res.data);
 };
 
 const debug =
