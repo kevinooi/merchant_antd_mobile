@@ -4,6 +4,7 @@ import TabLayout from "./TabLayout";
 
 import HomeTab from "../pages/Home";
 import ProfileTab from "../pages/Profile";
+import HistoryTab from "../pages/History";
 // import useUser from "../../lib/hooks/useUser";
 // import { ActivityIndicator, WingBlank } from "antd-mobile";
 
@@ -23,7 +24,7 @@ const Dashboard = () => {
           </DefaultLayout>
         ) :  */}
       <DefaultLayout>
-        {<TabLayout tabs={[<HomeTab />, <ProfileTab />]} />}
+        {<TabLayout tabs={[<HomeTab />, <HistoryTab />, <ProfileTab />]} />}
       </DefaultLayout>
       {/* ) : (
         <DefaultLayout>

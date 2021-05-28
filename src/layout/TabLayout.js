@@ -34,12 +34,12 @@ const TabLayout = ({ tabs }) => {
       >
         {tabs[0]}
       </TabBar.Item>
-      {/* <TabBar.Item
+      <TabBar.Item
         title="History"
         key="history"
         selected={selectedTab === "history"}
         onPress={() => {
-          setSelectedTab("history")
+          setSelectedTab("history");
         }}
         icon={
           <div
@@ -61,7 +61,7 @@ const TabLayout = ({ tabs }) => {
         }
       >
         {tabs[1]}
-      </TabBar.Item> */}
+      </TabBar.Item>
       <TabBar.Item
         title="Profile"
         key="profile"
@@ -88,10 +88,10 @@ const TabLayout = ({ tabs }) => {
           />
         }
       >
-        {tabs[1]}
+        {tabs[2]}
       </TabBar.Item>
     </TabBar>
   );
 };
 
-export default TabLayout
+export default TabLayout;
