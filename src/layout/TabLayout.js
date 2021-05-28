@@ -1,24 +1,24 @@
-import { TabBar } from "antd-mobile";
-import { useState } from "react";
+import { TabBar } from 'antd-mobile'
+import { useState } from 'react'
 
 const TabLayout = ({ tabs }) => {
-  const [selectedTab, setSelectedTab] = useState("home");
+  const [selectedTab, setSelectedTab] = useState('home')
 
   return (
     <TabBar>
       <TabBar.Item
         title="Home"
         key="home"
-        selected={selectedTab === "home"}
+        selected={selectedTab === 'home'}
         onPress={() => {
-          setSelectedTab("home");
+          setSelectedTab('home')
         }}
         icon={
           <div
             style={{
               width: 22,
               height: 22,
-              background: "url('/images/home.svg')",
+              background: "url('/images/home.svg')"
             }}
           />
         }
@@ -27,7 +27,7 @@ const TabLayout = ({ tabs }) => {
             style={{
               width: 22,
               height: 22,
-              background: "url('/images/home_selected.svg')",
+              background: "url('/images/home_selected.svg')"
             }}
           />
         }
@@ -37,16 +37,16 @@ const TabLayout = ({ tabs }) => {
       <TabBar.Item
         title="History"
         key="history"
-        selected={selectedTab === "history"}
+        selected={selectedTab === 'history'}
         onPress={() => {
-          setSelectedTab("history");
+          setSelectedTab('history')
         }}
         icon={
           <div
             style={{
               width: 22,
               height: 22,
-              background: "url('/images/history.svg')",
+              background: "url('/images/history.svg')"
             }}
           />
         }
@@ -55,7 +55,7 @@ const TabLayout = ({ tabs }) => {
             style={{
               width: 22,
               height: 22,
-              background: "url('/images/history_selected.svg')",
+              background: "url('/images/history_selected.svg')"
             }}
           />
         }
@@ -65,16 +65,16 @@ const TabLayout = ({ tabs }) => {
       <TabBar.Item
         title="Profile"
         key="profile"
-        selected={selectedTab === "profile"}
+        selected={selectedTab === 'profile'}
         onPress={() => {
-          setSelectedTab("profile");
+          setSelectedTab('profile')
         }}
         icon={
           <div
             style={{
               width: 22,
               height: 22,
-              background: "url('/images/profile.svg')",
+              background: "url('/images/profile.svg')"
             }}
           />
         }
@@ -83,7 +83,7 @@ const TabLayout = ({ tabs }) => {
             style={{
               width: 22,
               height: 22,
-              background: "url('/images/profile_selected.svg')",
+              background: "url('/images/profile_selected.svg')"
             }}
           />
         }
@@ -91,7 +91,7 @@ const TabLayout = ({ tabs }) => {
         {tabs[2]}
       </TabBar.Item>
     </TabBar>
-  );
-};
+  )
+}
 
-export default TabLayout;
+export default TabLayout

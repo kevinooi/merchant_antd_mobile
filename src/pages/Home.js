@@ -1,36 +1,36 @@
-import { useState } from "react";
-import { Modal, WingBlank, Button, Flex } from "antd-mobile";
-import QRView from "../components/qr_view";
-import client from "../network/request";
+import { useState } from 'react'
+import { Modal, WingBlank, Button, Flex } from 'antd-mobile'
+import QRView from '../components/qr_view'
+import client from '../network/request'
 
 const HomeTab = () => {
-  const [showModal, setShowModal] = useState(false);
-  const [isScanning, setIsScanning] = useState(false);
-  const [title, setTitle] = useState("");
-  const [message, setMessage] = useState("");
+  const [showModal, setShowModal] = useState(false)
+  const [isScanning, setIsScanning] = useState(false)
+  const [title, setTitle] = useState('')
+  const [message, setMessage] = useState('')
 
   const scanVoucher = async (data) => {
-    console.log(data);
-    const url = "http://127.0.0.1:3333/api/v1/admin/redeem-voucher";
+    console.log(data)
+    const url = 'http://127.0.0.1:3333/api/v1/admin/redeem-voucher'
     try {
-      const voucher = await client.post(url, data);
-      console.log(voucher);
-      setTitle("Thank You");
-      setMessage("Successfully Redeemed Voucher");
+      const voucher = await client.post(url, data)
+      console.log(voucher)
+      setTitle('Thank You')
+      setMessage('Successfully Redeemed Voucher')
     } catch (e) {
-      console.log(e);
-      setTitle("Error");
-      if (e.code == "voucher.expired") {
-        setMessage(e.message);
-      } else if (e.code == "voucher.redeemed") {
-        setMessage(e.message);
+      console.log(e)
+      setTitle('Error')
+      if (e.code == 'voucher.expired') {
+        setMessage(e.message)
+      } else if (e.code == 'voucher.redeemed') {
+        setMessage(e.message)
       } else {
-        setMessage(e.message);
+        setMessage(e.message)
       }
     }
 
-    setIsScanning(false);
-  };
+    setIsScanning(false)
+  }
 
   return (
     <>
@@ -50,9 +50,9 @@ const HomeTab = () => {
               <Flex.Item>
                 <Button
                   type="primary"
-                  style={{ background: "#FD9F13", borderColor: "#FD9F13" }}
+                  style={{ background: '#FD9F13', borderColor: '#FD9F13' }}
                   onClick={() => {
-                    setIsScanning(!isScanning);
+                    setIsScanning(!isScanning)
                   }}
                 >
                   Scan QR
@@ -68,12 +68,12 @@ const HomeTab = () => {
             title={title}
             footer={[
               {
-                text: "OK",
+                text: 'OK',
                 onPress: () => {
-                  setShowModal(false);
+                  setShowModal(false)
                   // setIsScanning(true);
-                },
-              },
+                }
+              }
             ]}
             animationType="slide-up"
           >
@@ -82,7 +82,7 @@ const HomeTab = () => {
         </>
       )}
     </>
-  );
-};
+  )
+}
 
-export default HomeTab;
+export default HomeTab

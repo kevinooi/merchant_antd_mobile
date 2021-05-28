@@ -1,29 +1,29 @@
-import { ListView, List, PullToRefresh } from "antd-mobile";
-import moment from "moment";
+import { ListView, List, PullToRefresh } from 'antd-mobile'
+import moment from 'moment'
 
 const HistoryVouchers = ({
-  // height,
+  height,
   histories,
   isLoading,
   totalCount,
   refreshHistory,
-  onClick = (value) => {},
+  onClick = (value) => {}
 }) => {
-  console.log(histories);
+  console.log(histories)
   return (
     <ListView
       dataSource={histories}
       renderFooter={() => (
-        <div style={{ padding: 30, textAlign: "center" }}>
-          {isLoading ? "Loading..." : "Pull to refresh"}
+        <div style={{ padding: 30, textAlign: 'center' }}>
+          {isLoading ? 'Loading...' : 'Pull to refresh'}
         </div>
       )}
       renderRow={(rowData, rowID) => {
-        console.log(rowData);
+        console.log(rowData)
         return (
-          <List renderHeader={() => "Basic Style"} className="my-list">
-            {" "}
-            <List.Item extra={"extra content"}>Title</List.Item>{" "}
+          <List renderHeader={() => 'Basic Style'} className="my-list">
+            {' '}
+            <List.Item extra={'extra content'}>Title</List.Item>{' '}
           </List>
           // <List
           //   key={rowID}
@@ -62,17 +62,17 @@ const HistoryVouchers = ({
             </List.Item> */
 
           // </List>
-        );
+        )
       }}
       renderBodyComponent={() => <ListBody />}
       renderSeparator={(sectionID, rowID) => (
         <div
           key={`${sectionID}-${rowID}`}
           style={{
-            backgroundColor: "#F5F5F9",
+            backgroundColor: '#F5F5F9',
             height: 8,
-            borderTop: "1px solid #ECECED",
-            borderBottom: "1px solid #ECECED",
+            borderTop: '1px solid #ECECED',
+            borderBottom: '1px solid #ECECED'
           }}
         />
       )}
@@ -88,28 +88,28 @@ const HistoryVouchers = ({
       //   await refreshHistory({ start: histories.getRowCount(), limit: 5 });
       // }}
       // onEndReachedThreshold={10}
-      // style={{
-      //   height,
-      //   overflow: "auto",
-      // }}
+      style={{
+        height,
+        overflow: 'auto'
+      }}
       pullToRefresh={
         <PullToRefresh
           refreshing={isLoading}
           onRefresh={() => refreshHistory({ start: 0, limit: 15 })}
           indicator={{
-            activate: "Release to refresh",
-            deactivate: "Release to cancel",
-            release: "Refreshing...",
-            finish: "Content refreshed",
+            activate: 'Release to refresh',
+            deactivate: 'Release to cancel',
+            release: 'Refreshing...',
+            finish: 'Content refreshed'
           }}
         />
       }
     />
-  );
-};
+  )
+}
 
 const ListBody = (props) => {
-  return <div className="am-list-body">{props.children}</div>;
-};
+  return <div className="am-list-body">{props.children}</div>
+}
 
-export default HistoryVouchers;
+export default HistoryVouchers

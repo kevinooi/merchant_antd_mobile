@@ -1,10 +1,10 @@
-import DefaultLayout from "./DefaultLayout";
-import TabLayout from "./TabLayout";
+import DefaultLayout from './DefaultLayout'
+import TabLayout from './TabLayout'
 // import { useState } from "react";
 
-import HomeTab from "../pages/Home";
-import ProfileTab from "../pages/Profile";
-import HistoryTab from "../pages/History";
+import HomeTab from '../pages/Home'
+import ProfileTab from '../pages/Profile'
+import HistoryTab from '../pages/History'
 // import useUser from "../../lib/hooks/useUser";
 // import { ActivityIndicator, WingBlank } from "antd-mobile";
 
@@ -41,7 +41,7 @@ const Dashboard = () => {
         </DefaultLayout>
       )} */}
     </>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

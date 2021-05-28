@@ -1,10 +1,10 @@
-import { List, WingBlank } from "antd-mobile";
+import { List, WingBlank } from 'antd-mobile'
 // import { mutate } from "swr";
 
 // import customFetch from "../../lib/fetch";
 // import { useState } from "react";
 
-const Item = List.Item;
+const Item = List.Item
 
 // interface ProfileProps {
 //   profile?: Object
@@ -73,7 +73,7 @@ const ProfileTab = () => {
         </>
       )} */}
     </>
-  );
-};
+  )
+}
 
-export default ProfileTab;
+export default ProfileTab
