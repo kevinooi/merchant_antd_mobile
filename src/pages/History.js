@@ -2,11 +2,8 @@ import { useEffect, useState } from 'react'
 import { ListView, WingBlank } from 'antd-mobile'
 import HistoryVouchers from '../components/history_vouchers'
 import client from '../network/request'
-import useSWR from 'swr'
 
 const HistoryTab = () => {
-  // const url = `http://127.0.0.1:3333/api/v1/admin/redeemed-vouchers`;
-  // const { data: response, error } = useSWR(url);
   // const [historyList, setHistoryList] = useState([]);
   const [histories, setHistories] = useState(
     new ListView.DataSource({
@@ -20,7 +17,7 @@ const HistoryTab = () => {
   const refreshHistory = async ({ start, limit }) => {
     setIsLoading(true)
 
-    const url = `http://127.0.0.1:3333/api/v1/admin/redeemed-vouchers`
+    const url = `/admin/vouchers`
     const result = await client.get(url)
 
     console.log(result)

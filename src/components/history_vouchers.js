@@ -21,19 +21,13 @@ const HistoryVouchers = ({
       renderRow={(rowData, rowID) => {
         console.log(rowData)
         return (
-          // <List renderHeader={() => 'Basic Style'} className="my-list">
-          //   {' '}
-          //   <List.Item extra={'extra content'}>Title</List.Item>{' '}
-          // </List>
           <List
             key={rowID}
             renderHeader={
               <>
-                <p style={{ margin: 0, color: 'green' }}>
-                  {rowData.redeemed_at
-                    ? moment(rowData.redeemed_at).format('YYYY-MM-DD HH:mma')
-                    : ''}
-                </p>
+                <h5 style={{ margin: 0, color: 'green', fontSize: 18 }}>
+                  Purchase Time: {rowData.created_at ? moment(rowData.created_at).format('YYYY-MM-DD HH:mma') : ''}
+                </h5>
               </>
             }
             // renderFooter={
@@ -53,15 +47,16 @@ const HistoryVouchers = ({
             // }
           >
             <List.Item multipleLine={true} wrap={true}>
+              Voucher Status:
               {rowData.status == 0
-                ? 'Pending'
+                ? ' Pending'
                 : rowData.status == 1
-                ? `Redeemed on ${
+                ? ` Redeemed on ${
                     rowData.redeemed_at
                       ? moment(rowData.redeemed_at).format('YYYY-MM-DD HH:mma')
                       : ''
                   }`
-                : `Expired on ${
+                : ` Expired on ${
                     rowData.expired_at ? moment(rowData.expired_at).format('YYYY-MM-DD HH:mma') : ''
                   }`}
             </List.Item>

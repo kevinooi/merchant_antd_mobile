@@ -11,21 +11,25 @@ const HomeTab = () => {
 
   const scanVoucher = async (data) => {
     console.log(data)
-    const url = 'http://127.0.0.1:3333/api/v1/admin/redeem-voucher'
+    const url = '/admin/vouchers/redeem'
     try {
-      const voucher = await client.post(url, data)
+      const voucher = await client.post(url, { code: data })
       console.log(voucher)
+
       setTitle('Thank You')
       setMessage('Successfully Redeemed Voucher')
     } catch (e) {
+      setTitle('Failed to Redeem')
       console.log(e)
-      setTitle('Error')
-      if (e.code == 'voucher.expired') {
+      
+      if (e.code == 'voucher.redeemed') {
         setMessage(e.message)
-      } else if (e.code == 'voucher.redeemed') {
+        console.log(1)
+      } else if (e.code == 'voucher.expired') {
         setMessage(e.message)
+        console.log(2)
       } else {
-        setMessage(e.message)
+        setMessage('Invalid Code')
       }
     }
 
