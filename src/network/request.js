@@ -7,8 +7,7 @@ const isHandlerEnabled = (config = { handlerEnabled: true }) => {
 const requestHandler = (request) => {
   console.log(request)
   if (isHandlerEnabled(request)) {
-    const token = 'Mg.CNVgnVIOp38vqRHnRmp7om-faa1ZPmxfbuZKFMzaj-NHwsi6F327K3LqoSAf'
-    // localStorage.getItem('token') || undefined
+    const token = localStorage.getItem('token') || undefined
 
     if (token != null && typeof token !== 'undefined') {
       console.log(token)
@@ -21,6 +20,22 @@ const requestHandler = (request) => {
 
 const errorHandler = (error) => {
   console.log(error?.response)
+
+  if (error?.response?.status === 400) {
+    if (error.response.data.code == 'voucher.redeemed') {
+      return Promise.reject({
+        code: error.response.data.code,
+        message: error.response.data.message
+      })
+    }
+
+    if (error.response.data.code == 'voucher.expired') {
+      return Promise.reject({
+        code: error.response.data.code,
+        message: error.response.data.message
+      })
+    }
+  }
 
   if (error?.response?.status === 401) {
     // unauthorized
@@ -61,7 +76,8 @@ const successHandler = (response) => {
 }
 
 const client = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL
+  // baseURL: process.env.REACT_APP_BASE_URL
+  baseURL: process.env.REACT_APP_BASE_URL_DEBUG
 })
 client.interceptors.request.use((request) => requestHandler(request))
 client.interceptors.response.use(
