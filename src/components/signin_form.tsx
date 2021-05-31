@@ -4,11 +4,11 @@ import { mutate } from 'swr'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'
 import { MyInputItem } from './formik_input'
-// import Link from "next/link"
 
 import AuthService from '../network/services/auth'
 import { useState } from 'react'
 import { login } from '../store/auth'
+import { Link } from 'react-router-dom'
 
 interface FormErrors {
   email?: string
@@ -83,11 +83,11 @@ const SignInForm = () => {
       }) => (
         <Form>
           <List
-          // renderFooter={
-          //   <Link href="/forgot_password">
-          //     <a style={{ display: "block", textAlign: "right" }}>Forgot password?</a>
-          //   </Link>
-          // }
+            renderFooter={
+              <Link to="/forgot-password">
+                <a style={{ display: 'block', textAlign: 'right' }}>Forgot password?</a>
+              </Link>
+            }
           >
             <MyInputItem
               type="email"

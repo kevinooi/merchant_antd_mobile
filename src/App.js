@@ -6,6 +6,7 @@ import './style.css'
 import SignInForm from './components/signin_form'
 import Dashboard from './layout/DashboardLayout'
 import DefaultLayout from './layout/DefaultLayout'
+import ForgotPasswordForm from './components/forgot_password_form'
 
 const PrivateRoute = ({ children, ...rest }) => {
   const { token, profile } = useSnapshot(store)
@@ -65,12 +66,22 @@ function App() {
         </Switch>
       </PrivateRoute>
 
-      <PublicRoute path="/">
+      <PublicRoute path="/:path?">
         <DefaultLayout>
-          <WingBlank>
-            <h1 style={{ whiteSpace: 'pre-line' }}>{`Sign in to your account`}</h1>
-            <SignInForm />
-          </WingBlank>
+          <Switch>
+            <Route path="/" exact>
+              <WingBlank>
+                <h1 style={{ whiteSpace: 'pre-line' }}>{`Sign in to your account`}</h1>
+                <SignInForm />
+              </WingBlank>
+            </Route>
+            <Route path="/forgot-password" exact>
+              <WingBlank>
+                <h1 style={{ whiteSpace: 'pre-line' }}>{`Please enter your email`}</h1>
+                <ForgotPasswordForm />
+              </WingBlank>
+            </Route>
+          </Switch>
         </DefaultLayout>
       </PublicRoute>
     </Switch>
