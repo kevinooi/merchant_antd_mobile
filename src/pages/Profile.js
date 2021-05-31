@@ -1,8 +1,9 @@
 import { List, WingBlank } from 'antd-mobile'
-// import { mutate } from "swr";
-
-// import customFetch from "../../lib/fetch";
-// import { useState } from "react";
+import EditPasswordForm from '../components/edit_password_form'
+import store, { logout } from '../store/auth'
+import { useState } from 'react'
+import { useSnapshot } from 'valtio'
+import { useHistory } from 'react-router-dom'
 
 const Item = List.Item
 
@@ -11,31 +12,31 @@ const Item = List.Item
 // }
 
 const ProfileTab = () => {
-  //   const user = useUser()
-  //   const [isChangePassword, setIsChangePassword] = useState(false)
-  //   const router = useRouter()
+  const { profile } = useSnapshot(store)
+  const [isChangePassword, setIsChangePassword] = useState(false)
+  const history = useHistory()
 
   return (
     <>
-      {/* {isChangePassword ? (
+      {isChangePassword ? (
         <>
           <WingBlank>
             <h1>Please change your password</h1>
           </WingBlank>
 
-          <EditPasswordForm cancel={() => setIsChangePassword(false)} />
+          <WingBlank>
+            <EditPasswordForm cancel={() => setIsChangePassword(false)} />
+          </WingBlank>
         </>
       ) : (
         <>
           <WingBlank>
-            <h1>
-              {(user?.places?.length > 0 && user.places[0]?.name) ?? "Place"}
-            </h1>
+            <h1>{profile?.vendor?.vendor_name ?? ''}</h1>
           </WingBlank>
 
           <List renderHeader="Email">
             <Item multipleLine={true} wrap={true}>
-              {user?.email ?? "Email"}
+              {profile?.email ?? 'Email'}
             </Item>
           </List>
 
@@ -50,8 +51,7 @@ const ProfileTab = () => {
             </Item>
             <Item
               onClick={async () => {
-                await customFetch("/api/logout")
-                mutate("/api/user", { isLoggedIn: false })
+                logout()
               }}
               arrow="horizontal"
             >
@@ -59,11 +59,11 @@ const ProfileTab = () => {
             </Item>
           </List>
 
-          {user?.role?.name == "Admin" && (
+          {profile?.role?.name == 'Admin' && (
             <List renderHeader="Admin">
               <Item
                 onClick={() => {
-                  router.push("/signup")
+                  history.push('/signup')
                 }}
               >
                 Register user
@@ -71,7 +71,7 @@ const ProfileTab = () => {
             </List>
           )}
         </>
-      )} */}
+      )}
     </>
   )
 }
