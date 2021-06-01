@@ -3,7 +3,6 @@ import EditPasswordForm from '../components/edit_password_form'
 import store, { logout } from '../store/auth'
 import { useState } from 'react'
 import { useSnapshot } from 'valtio'
-import { useHistory } from 'react-router-dom'
 
 const Item = List.Item
 
@@ -14,7 +13,6 @@ const Item = List.Item
 const ProfileTab = () => {
   const { profile } = useSnapshot(store)
   const [isChangePassword, setIsChangePassword] = useState(false)
-  const history = useHistory()
 
   return (
     <>
@@ -59,7 +57,7 @@ const ProfileTab = () => {
             </Item>
           </List>
 
-          {profile?.role?.name == 'Admin' && (
+          {/* {profile?.role?.name == 'Admin' && (
             <List renderHeader="Admin">
               <Item
                 onClick={() => {
@@ -69,7 +67,7 @@ const ProfileTab = () => {
                 Register user
               </Item>
             </List>
-          )}
+          )} */}
         </>
       )}
     </>

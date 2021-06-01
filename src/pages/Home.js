@@ -22,10 +22,10 @@ const HomeTab = () => {
       setTitle('Failed to Redeem')
       console.log(e)
       
-      if (e.code == 'voucher.redeemed') {
+      if (e.code === 'voucher.redeemed') {
         setMessage(e.message)
         console.log(1)
-      } else if (e.code == 'voucher.expired') {
+      } else if (e.code === 'voucher.expired') {
         setMessage(e.message)
         console.log(2)
       } else {

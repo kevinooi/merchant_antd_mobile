@@ -22,14 +22,14 @@ const errorHandler = (error) => {
   console.log(error?.response)
 
   if (error?.response?.status === 400) {
-    if (error.response.data.code == 'voucher.redeemed') {
+    if (error.response.data.code === 'voucher.redeemed') {
       return Promise.reject({
         code: error.response.data.code,
         message: error.response.data.message
       })
     }
 
-    if (error.response.data.code == 'voucher.expired') {
+    if (error.response.data.code === 'voucher.expired') {
       return Promise.reject({
         code: error.response.data.code,
         message: error.response.data.message
@@ -76,8 +76,8 @@ const successHandler = (response) => {
 }
 
 const client = axios.create({
-  // baseURL: process.env.REACT_APP_BASE_URL
-  baseURL: process.env.REACT_APP_BASE_URL_DEBUG
+  baseURL: process.env.REACT_APP_BASE_URL
+  // baseURL: process.env.REACT_APP_BASE_URL_DEBUG
 })
 client.interceptors.request.use((request) => requestHandler(request))
 client.interceptors.response.use(
