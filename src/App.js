@@ -1,12 +1,13 @@
-import { WingBlank } from 'antd-mobile'
 import store, { checkAuthorization } from './store/auth'
 import { Route, Switch, Redirect } from 'react-router-dom'
 import { useSnapshot } from 'valtio'
 import './style.css'
-import SignInForm from './components/signin_form'
 import Dashboard from './layout/DashboardLayout'
 import DefaultLayout from './layout/DefaultLayout'
-import ForgotPasswordForm from './components/forgot_password_form'
+import Login from './pages/Login'
+import ForgotPassword from './pages/ForgotPassword'
+import VerificationCode from './pages/VerificationCode'
+import ResetPassword from './pages/ResetPassword'
 
 const PrivateRoute = ({ children, ...rest }) => {
   const { token, profile } = useSnapshot(store)
@@ -65,21 +66,20 @@ function App() {
           </Route>
         </Switch>
       </PrivateRoute>
-
       <PublicRoute path="/:path?">
         <DefaultLayout>
           <Switch>
             <Route path="/" exact>
-              <WingBlank>
-                <h1 style={{ whiteSpace: 'pre-line' }}>{`Sign in to your account`}</h1>
-                <SignInForm />
-              </WingBlank>
+              <Login />
             </Route>
             <Route path="/forgot-password" exact>
-              <WingBlank>
-                <h1 style={{ whiteSpace: 'pre-line' }}>{`Please enter your email`}</h1>
-                <ForgotPasswordForm />
-              </WingBlank>
+              <ForgotPassword />
+            </Route>
+            <Route path="/verification-code" exact>
+              <VerificationCode />
+            </Route>
+            <Route path="/reset-password" exact>
+              <ResetPassword />
             </Route>
           </Switch>
         </DefaultLayout>

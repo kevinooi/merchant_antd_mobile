@@ -7,6 +7,9 @@ import { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import client from '../network/request'
 import { MyInputItem } from './formik_input'
+import AuthService from '../network/services/auth'
+import { mutate } from 'swr'
+import { login } from '../store/auth'
 
 interface FormErrors {
   password?: string
@@ -22,9 +25,11 @@ interface FormValues {
 
 interface FormProps {
   cancel?: () => void
+  email?: string
+  code?: string
 }
 
-const EditPasswordForm = ({ cancel }: FormProps) => {
+const EditPasswordForm = ({ cancel, email, code }: FormProps) => {
   const [showPassword, setShowPassword] = useState(false)
   const [showNewPassword, setShowNewPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -45,11 +50,13 @@ const EditPasswordForm = ({ cancel }: FormProps) => {
         count += /\d/.test(values.new_password) ? 1 : 0
         // count += /[@]/.test(values.new_password) ? 1 : 0
 
-        if (!values.password) {
-          errors.password = 'Password is required'
-          Toast.info('Password is required', 1)
+        if (code == null && email == null) {
+          if (!values.password) {
+            errors.password = 'Password is required'
+            Toast.info('Password is required', 1)
 
-          return errors
+            return errors
+          }
         }
 
         if (!values.new_password) {
@@ -68,7 +75,7 @@ const EditPasswordForm = ({ cancel }: FormProps) => {
           return errors
         }
 
-        if (values.confirm_password != values.new_password) {
+        if (values.confirm_password !== values.new_password) {
           errors.confirm_password = 'Password does not match'
           Toast.info('Password does not match', 1)
         }
@@ -80,108 +87,71 @@ const EditPasswordForm = ({ cancel }: FormProps) => {
 
         const { password, new_password, confirm_password } = values
 
-        // if (code != null) {
-        try {
-          const result = await client.post(`/auth/change-password`, {
-            password: password,
-            new_password: new_password,
-            new_password_confirmation: confirm_password
-          })
+        if (email == null && code == null) {
+          try {
+            const result = await client.post(`/auth/change-password`, {
+              password: password,
+              new_password: new_password,
+              new_password_confirmation: confirm_password
+            })
 
-          if (result.status != 200) {
-            setErrors({ confirm_password: result.data })
-            Toast.info('Something went wrong, please contact Jomgift', 2)
-          } else {
-            Toast.info('Password updated', 2)
-            resetForm({})
+            if (result.status !== 200) {
+              setErrors({ confirm_password: result.data })
+              Toast.info('Something went wrong, please contact Jomgift', 2)
+            } else {
+              Toast.info('Password updated', 2)
+              resetForm({})
 
-            history.push('/')
+              history.push('/')
+            }
+
+            setSubmitting(false)
+          } catch (error) {
+            let message = 'Password change failed'
+            if (error.response?.data?.message[0]?.messages[0]?.message) {
+              message = error.response?.data?.message[0]?.messages[0]?.message
+            }
+
+            Toast.info(message, 2)
           }
+        } else {
+          try {
+            const result = await client.post(`/auth/forgot-password`, {
+              email: email,
+              password: new_password,
+              password_confirmation: confirm_password,
+              auth_code: code
+            })
 
-          setSubmitting(false)
-        } catch (error) {
-          let message = 'Password change failed'
-          if (error.response?.data?.message[0]?.messages[0]?.message) {
-            message = error.response?.data?.message[0]?.messages[0]?.message
+            if (result.status !== 200) {
+              setErrors({ confirm_password: result.data })
+              Toast.info('Something went wrong, please contact Jomgift', 2)
+            } else {
+              Toast.info('Password updated', 2)
+              resetForm({})
+
+              //Login after reset password
+              const result = await AuthService.login({ email: email, password: new_password })
+
+              if (result) {
+                login({ token: result.data.jwt.token, profile: result.data.user })
+                mutate('/me', result)
+              } else {
+              }
+            }
+
+            setSubmitting(false)
+          } catch (error) {
+            let message = 'Password change failed'
+            if (error.response?.data?.message[0]?.messages[0]?.message) {
+              message = error.response?.data?.message[0]?.messages[0]?.message
+            }
+
+            Toast.info(message, 2)
           }
-
-          Toast.info(message, 2)
         }
-        // } else {
-        //   try {
-        // const result = await gqlApi({
-        //   query: `
-        //     mutation UpdateUser($input: updateUserInput) {
-        //         updateUser(input: $input) {
-        //             user {
-        //                 id
-        //                 username
-        //                 email
-        //                 role {
-        //                   id
-        //                   name
-        //                 }
-        //                 profile {
-        //                     id
-        //                     first_name
-        //                     last_name
-        //                     display_name
-        //                     info
-        //                 }
-        //                 places {
-        //                     id
-        //                     name
-        //                 }
-        //                 is_default_password
-        //             }
-        //         }
-        //     }
-        // `,
-        //   variables: {
-        //     input: {
-        //       where: {
-        //         id: user?.id,
-        //       },
-        //       data: {
-        //         password: new_password,
-        //         is_default_password: false,
-        //       },
-        //     },
-        //   },
-        //   jwt: user.jwt,
-        // })
 
-        // let userProfile = result?.data?.updateUser?.user ?? null
-
-        // const newUser = {
-        //   isLoggedIn: true,
-        //   ...userProfile,
-        // }
-
-        // const result2 = await customFetch("/api/login", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify(newUser),
-        // })
-        // mutate("/api/user", newUser)
-
-        // if (result2.isLoggedIn) {
-        //   Toast.info("Password updated", 2)
-        //   resetForm({})
-        // }
-
-        //     setSubmitting(false)
-        //   } catch (error) {
-        //     let message = 'Password change failed'
-        //     if (error.response?.data?.message[0]?.messages[0]?.message) {
-        //       message = error.response?.data?.message[0]?.messages[0]?.message
-        //     }
-
-        //     Toast.info(message, 2)
-        //   }
-        // }
-
-        // setSubmitting(false)
+        setSubmitting(false)
       }}
     >
       {({
@@ -196,23 +166,27 @@ const EditPasswordForm = ({ cancel }: FormProps) => {
         submitForm
       }) => (
         <Form>
-          <List renderHeader={'Current Password'}>
-            <MyInputItem
-              type={showPassword ? 'text' : 'password'}
-              name="password"
-              onChange={(value) => setFieldValue('password', value)}
-              onBlur={handleBlur}
-              value={values.password}
-              touched={touched.password}
-              error={errors.password != null}
-              extra={
-                <FontAwesomeIcon
-                  icon={showPassword ? faEye : faEyeSlash}
-                  onClick={() => setShowPassword(!showPassword)}
-                />
-              }
-            />
-          </List>
+          {code == null && email == null ? (
+            <List renderHeader={'Current Password'}>
+              <MyInputItem
+                type={showPassword ? 'text' : 'password'}
+                name="password"
+                onChange={(value) => setFieldValue('password', value)}
+                onBlur={handleBlur}
+                value={values.password}
+                touched={touched.password}
+                error={errors.password != null}
+                extra={
+                  <FontAwesomeIcon
+                    icon={showPassword ? faEye : faEyeSlash}
+                    onClick={() => setShowPassword(!showPassword)}
+                  />
+                }
+              />
+            </List>
+          ) : (
+            <></>
+          )}
 
           <List renderHeader={'New Password'}>
             <MyInputItem

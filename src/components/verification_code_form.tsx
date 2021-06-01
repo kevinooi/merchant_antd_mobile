@@ -6,30 +6,30 @@ import { useHistory } from 'react-router-dom'
 import client from '../network/request'
 
 interface FormErrors {
-  email?: string
+  code?: string
 }
 
 interface FormValues {
-  email: string
+  code: string
 }
 
-const ForgotPasswordForm = () => {
+const VerificationCodeForm = ({ email }) => {
   const history = useHistory()
 
   return (
     <Formik
-      initialValues={{ email: '' }}
+      initialValues={{ code: '' }}
       validateOnChange={false}
       validateOnBlur={false}
       validate={(values: FormValues) => {
         const errors: FormErrors = {}
 
-        if (!values.email) {
-          errors.email = 'Email is required'
-          Toast.info('Email is required', 1)
-        } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
-          errors.email = 'Invalid email address'
-          Toast.info('Invalid email address')
+        if (!values.code) {
+          errors.code = 'Verification code is required'
+          Toast.info('Verification code is required', 1)
+        } else if (values.code.length !== 6) {
+          errors.code = 'Invalid verification code'
+          Toast.info('Invalid verification code')
         }
 
         return errors
@@ -37,28 +37,28 @@ const ForgotPasswordForm = () => {
       onSubmit={async (values, { setSubmitting, resetForm, setErrors }) => {
         setSubmitting(true)
 
-        const { email } = values
+        const { code } = values
 
         try {
-          const result = await client.post(`/auth/code`, {
-            email: email
+          const result = await client.post(`/auth/code/verify`, {
+            email: email,
+            code: code
           })
 
-          console.log(result)
-
           if (result.status !== 200) {
-            setErrors({ email: result.data })
+            setErrors({ code: result.data })
             Toast.info('Something went wrong, please contact Jomgift', 2)
-          } else {
-            Toast.info(`A verification code has been sent to ${email}`, 2)
+          } else if (result.data.code === 'auth.code.invalid') {
             resetForm({})
-            history.push({ pathname: '/verification-code', state: { detail: email } })
+            Toast.info(result.data.message, 2)
+          } else {
+            history.push({ pathname: '/reset-password', state: { detail: email, code: code } })
           }
 
           setSubmitting(false)
         } catch (error) {
           console.log(error)
-          let message = 'Password reset failed'
+          let message = 'Verification failed'
           if (error.response?.data?.message[0]?.messages[0]?.message) {
             message = error.response?.data?.message[0]?.messages[0]?.message
           }
@@ -83,14 +83,14 @@ const ForgotPasswordForm = () => {
         <Form>
           <List>
             <MyInputItem
-              type="email"
-              name="email"
-              label="Email"
-              onChange={(value) => setFieldValue('email', value)}
-              onBlur={() => setFieldTouched('email', true)}
-              value={values.email}
-              touched={touched.email}
-              error={errors.email != null}
+              type="money"
+              name="code"
+              moneyKeyboardAlign="left"
+              onChange={(value) => setFieldValue('code', value)}
+              onBlur={() => setFieldTouched('code', true)}
+              value={values.code}
+              touched={touched.code}
+              error={errors.code != null}
             />
           </List>
 
@@ -102,7 +102,7 @@ const ForgotPasswordForm = () => {
                 type="ghost"
                 style={{ color: '#FD9F13', borderColor: '#FD9F13' }}
                 onClick={() => {
-                  history.push('/')
+                  history.push('/forgot-password')
                 }}
               >
                 Cancel
@@ -127,4 +127,4 @@ const ForgotPasswordForm = () => {
   )
 }
 
-export default ForgotPasswordForm
+export default VerificationCodeForm

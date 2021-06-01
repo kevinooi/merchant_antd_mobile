@@ -46,6 +46,7 @@ export const MyInputItem = (props) => (
         type={props.type}
         name={props.name}
         onChange={(value) => props.onChange(value)}
+        moneyKeyboardAlign={props.moneyKeyboardAlign}
         onBlur={props.onBlur}
         value={props.value}
         error={props.error}
@@ -59,6 +60,7 @@ export const MyInputItem = (props) => (
         type={props.type}
         name={props.name}
         onChange={(value) => props.onChange(value)}
+        moneyKeyboardAlign={props.moneyKeyboardAlign}
         onBlur={props.onBlur}
         value={props.value}
         error={props.error}
