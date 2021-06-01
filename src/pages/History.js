@@ -2,33 +2,39 @@ import { useEffect, useState } from 'react'
 import { ListView, WingBlank } from 'antd-mobile'
 import HistoryVouchers from '../components/history_vouchers'
 import client from '../network/request'
+import store from '../store/auth'
+import { useSnapshot } from 'valtio'
 
 const HistoryTab = () => {
-  // const [historyList, setHistoryList] = useState([]);
+  const { profile } = useSnapshot(store)
   const [histories, setHistories] = useState(
     new ListView.DataSource({
       rowHasChanged: (row1, row2) => row1 !== row2
     })
   )
+  const [historyList, setHistoryList] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [totalCount, setTotalCount] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
   const [height, setHeight] = useState(0)
 
-  const refreshHistory = async ({ start, limit }) => {
+  const refreshHistory = async ({ page, limit }) => {
     setIsLoading(true)
 
-    const url = `/admin/vouchers`
+    const url = `/admin/vouchers?page=${page}&limit=${limit}`
     const result = await client.get(url)
 
-    console.log(result)
     const total = result.data.vouchers.meta.total
-    const vouchers = result.data.vouchers.data
-    // const newList = historyList.concat(vouchers);
-    const newDS = histories.cloneWithRows(vouchers)
+    const currentPage = result.data.vouchers.meta.current_page
+  
     setTotalCount(total)
-    console.log(newDS)
+    setCurrentPage(currentPage)
 
-    // setHistoryList(newList);
+    const vouchers = result.data.vouchers.data
+    const newList = historyList.concat(vouchers)
+    const newDS = histories.cloneWithRows(newList)
+
+    setHistoryList(newList)
     setHistories(newDS)
 
     setIsLoading(false)
@@ -36,12 +42,8 @@ const HistoryTab = () => {
 
   useEffect(() => {
     setHeight(document.documentElement.clientHeight - 32 - 45 - 50)
-    // historyCount()
-
-    refreshHistory({ start: 0, limit: 15 })
-  }, [])
-
-  //   const user = useUser()
+    refreshHistory({ page: 1, limit: 5 })
+  }, [profile])
 
   return (
     <>
@@ -51,6 +53,7 @@ const HistoryTab = () => {
 
       <HistoryVouchers
         height={height}
+        currentPage={currentPage}
         histories={histories}
         isLoading={isLoading}
         totalCount={totalCount}

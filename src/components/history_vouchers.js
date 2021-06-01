@@ -3,13 +3,13 @@ import moment from 'moment'
 
 const HistoryVouchers = ({
   height,
+  currentPage,
   histories,
   isLoading,
   totalCount,
   refreshHistory,
   onClick = (value) => {}
 }) => {
-  console.log(histories)
   return (
     <ListView
       dataSource={histories}
@@ -19,46 +19,44 @@ const HistoryVouchers = ({
         </div>
       )}
       renderRow={(rowData, rowID) => {
-        console.log(rowData)
+        const active = rowData.status === 0
+        const redeemed = rowData.status === 1
         return (
           <List
             key={rowID}
             renderHeader={
-              <>
-                <h5 style={{ margin: 0, color: 'green', fontSize: 18 }}>
-                  Purchase Time: {rowData.created_at ? moment(rowData.created_at).format('YYYY-MM-DD HH:mma') : ''}
-                </h5>
-              </>
+              <h5
+                style={{
+                  margin: 0,
+                  color: active ? '#33A7FF' : redeemed ? 'green' : '#D5563A',
+                  fontSize: 18
+                }}
+              >
+                Voucher Status:
+                {active
+                  ? ' Active'
+                  : redeemed
+                  ? ` Redeemed on ${
+                      rowData.redeemed_at
+                        ? moment(rowData.redeemed_at).format('YYYY-MM-DD HH:mma')
+                        : ''
+                    }`
+                  : ` Expired`}
+              </h5>
             }
-            // renderFooter={
-            //   <>
-            //     <p
-            //       style={{
-            //         margin: 0,
-            //         color: rowData.checkout_time ? "green" : "red",
-            //       }}
-            //     >
-            //       {rowData.checkout_time ? "Check out" : "Check out pending"}
-            //     </p>
-            //     {rowData.checkout_time
-            //       ? moment(rowData.checkout_time).format("YYYY-MM-DD HH:mma")
-            //       : ""}
-            //   </>
-            // }
           >
             <List.Item multipleLine={true} wrap={true}>
-              Voucher Status:
-              {rowData.status == 0
-                ? ' Pending'
-                : rowData.status == 1
-                ? ` Redeemed on ${
-                    rowData.redeemed_at
-                      ? moment(rowData.redeemed_at).format('YYYY-MM-DD HH:mma')
-                      : ''
-                  }`
-                : ` Expired on ${
-                    rowData.expired_at ? moment(rowData.expired_at).format('YYYY-MM-DD HH:mma') : ''
-                  }`}
+              <h5 style={{ margin: 0 }}>
+                Sold on{' '}
+                {rowData.created_at ? moment(rowData.created_at).format('YYYY-MM-DD HH:mma') : ''}
+              </h5>
+              {rowData.expired_at ? (
+                <h5 style={{ margin: 0 }}>
+                  Expired on {moment(rowData.expired_at).format('YYYY-MM-DD HH:mma')}
+                </h5>
+              ) : (
+                ''
+              )}
             </List.Item>
           </List>
         )
@@ -80,10 +78,11 @@ const HistoryVouchers = ({
       scrollRenderAheadDistance={500}
       onEndReached={async (event) => {
         if (isLoading || histories.getRowCount() >= totalCount) {
+          console.log(isLoading || histories.getRowCount() >= totalCount)
           return
         }
 
-        await refreshHistory({ start: histories.getRowCount(), limit: 5 })
+        await refreshHistory({ page: currentPage + 1, limit: 5 })
       }}
       onEndReachedThreshold={10}
       style={{
@@ -93,7 +92,7 @@ const HistoryVouchers = ({
       pullToRefresh={
         <PullToRefresh
           refreshing={isLoading}
-          onRefresh={() => refreshHistory({ start: 0, limit: 15 })}
+          onRefresh={() => refreshHistory({ page: 1, limit: 5 })}
           indicator={{
             activate: 'Release to refresh',
             deactivate: 'Release to cancel',
@@ -102,6 +101,7 @@ const HistoryVouchers = ({
           }}
         />
       }
+      pageSize={5}
     />
   )
 }
