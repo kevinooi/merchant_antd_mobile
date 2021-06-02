@@ -10,7 +10,7 @@ const QRView = ({ scanVoucher, setIsScanning, setShowModal }) => {
       console.log(data)
 
       try {
-        const result = await scanVoucher(data)
+        await scanVoucher(data)
       } catch (e) {
         console.log(e)
       }
@@ -47,7 +47,7 @@ const QRView = ({ scanVoucher, setIsScanning, setShowModal }) => {
             style={{ width: '100%' }}
           />
 
-          <WingBlank size="lg">
+          <WingBlank>
             <h4>{error?.toString()}</h4>
             <Button
               type="primary"
@@ -61,11 +61,11 @@ const QRView = ({ scanVoucher, setIsScanning, setShowModal }) => {
             </Button>
           </WingBlank>
 
-          <div
+          {/* <div
             style={{
               height: '60px'
             }}
-          ></div>
+          ></div> */}
         </div>
       )}
     </>

@@ -18,7 +18,7 @@ const HistoryTab = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [height, setHeight] = useState(0)
 
-  const refreshHistory = async ({ page, limit }) => {
+  const refreshHistory = async ({ refresh, page, limit }) => {
     setIsLoading(true)
 
     const url = `/admin/vouchers?page=${page}&limit=${limit}`
@@ -26,12 +26,19 @@ const HistoryTab = () => {
 
     const total = result.data.vouchers.meta.total
     const currentPage = result.data.vouchers.meta.current_page
-  
+
     setTotalCount(total)
     setCurrentPage(currentPage)
 
-    const vouchers = result.data.vouchers.data
-    const newList = historyList.concat(vouchers)
+    const vouchers = result?.data?.vouchers?.data ?? []
+    let newList = []
+
+    if (refresh) {
+      setHistoryList([])
+      newList = vouchers
+    } else {
+      newList = historyList.concat(vouchers)
+    }
     const newDS = histories.cloneWithRows(newList)
 
     setHistoryList(newList)
@@ -42,7 +49,7 @@ const HistoryTab = () => {
 
   useEffect(() => {
     setHeight(document.documentElement.clientHeight - 32 - 45 - 50)
-    refreshHistory({ page: 1, limit: 5 })
+    refreshHistory({ refresh: true, page: 1, limit: 10 })
   }, [profile])
 
   return (

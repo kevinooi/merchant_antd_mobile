@@ -82,7 +82,7 @@ const HistoryVouchers = ({
           return
         }
 
-        await refreshHistory({ page: currentPage + 1, limit: 5 })
+        await refreshHistory({ page: currentPage + 1, limit: 10 })
       }}
       onEndReachedThreshold={10}
       style={{
@@ -92,7 +92,7 @@ const HistoryVouchers = ({
       pullToRefresh={
         <PullToRefresh
           refreshing={isLoading}
-          onRefresh={() => refreshHistory({ page: 1, limit: 5 })}
+          onRefresh={() => refreshHistory({ refresh: true, page: 1, limit: 10 })}
           indicator={{
             activate: 'Release to refresh',
             deactivate: 'Release to cancel',
@@ -101,7 +101,7 @@ const HistoryVouchers = ({
           }}
         />
       }
-      pageSize={5}
+      pageSize={4}
     />
   )
 }
