@@ -19,7 +19,7 @@ const ProfileTab = () => {
       {isChangePassword ? (
         <>
           <WingBlank>
-            <h1>Please change your password</h1>
+            <h1 style={{ textAlign: 'center' }}>Change password</h1>
           </WingBlank>
 
           <WingBlank>
@@ -29,7 +29,7 @@ const ProfileTab = () => {
       ) : (
         <>
           <WingBlank>
-            <h1>{profile?.vendor?.vendor_name ?? ''}</h1>
+            <h1 style={{ textAlign: 'center' }}>{profile?.vendor?.vendor_name ?? ''}</h1>
           </WingBlank>
 
           <List renderHeader="Email">

@@ -28,32 +28,40 @@ const HistoryVouchers = ({
               <h5
                 style={{
                   margin: 0,
-                  color: active ? '#33A7FF' : redeemed ? 'green' : '#D5563A',
+                  color: '#000000',
                   fontSize: 18
                 }}
               >
-                Voucher Status:
-                {active
-                  ? ' Active'
-                  : redeemed
-                  ? ` Redeemed on ${
-                      rowData.redeemed_at
-                        ? moment(rowData.redeemed_at).format('YYYY-MM-DD HH:mma')
-                        : ''
-                    }`
-                  : ` Expired`}
+                {rowData?.title ?? ''}
               </h5>
             }
           >
             <List.Item multipleLine={true} wrap={true}>
-              <h5 style={{ margin: 0 }}>
+              <p
+                style={{
+                  margin: 0,
+                  color: active ? '#33A7FF' : redeemed ? 'green' : '#D5563A',
+                  fontSize: 14
+                }}
+              >
+                {active
+                  ? 'Active voucher'
+                  : redeemed
+                  ? ` Voucher redeemed on ${
+                      rowData.redeemed_at
+                        ? moment(rowData.redeemed_at).format('YYYY-MM-DD HH:mma')
+                        : ''
+                    }`
+                  : `Voucher expired`}
+              </p>
+              <p style={{ margin: 0, color: 'grey', fontSize: 14 }}>
                 Sold on{' '}
                 {rowData.created_at ? moment(rowData.created_at).format('YYYY-MM-DD HH:mma') : ''}
-              </h5>
+              </p>
               {rowData.expired_at ? (
-                <h5 style={{ margin: 0 }}>
+                <p style={{ margin: 0, color: 'grey', fontSize: 14 }}>
                   Expired on {moment(rowData.expired_at).format('YYYY-MM-DD HH:mma')}
-                </h5>
+                </p>
               ) : (
                 ''
               )}

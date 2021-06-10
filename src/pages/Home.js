@@ -21,7 +21,7 @@ const HomeTab = () => {
     } catch (e) {
       setTitle('Failed to Redeem')
       console.log(e)
-      
+
       if (e.code === 'voucher.redeemed') {
         setMessage(e.message)
         console.log(1)
@@ -49,7 +49,7 @@ const HomeTab = () => {
       ) : (
         <>
           <WingBlank>
-            <h1>Redeem Voucher</h1>
+            <h1 style={{ textAlign: 'center' }}>Redeem Voucher</h1>
             <Flex>
               <Flex.Item>
                 <Button

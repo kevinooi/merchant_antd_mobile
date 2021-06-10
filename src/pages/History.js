@@ -55,7 +55,7 @@ const HistoryTab = () => {
   return (
     <>
       <WingBlank>
-        <h1>History</h1>
+        <h1 style={{ textAlign: 'center' }}>History</h1>
       </WingBlank>
 
       <HistoryVouchers
