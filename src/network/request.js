@@ -19,7 +19,7 @@ const requestHandler = (request) => {
 }
 
 const errorHandler = (error) => {
-  console.log(error?.response)
+  console.log(error)
 
   if (error?.response?.status === 400) {
     if (error.response.data.code === 'voucher.redeemed') {
@@ -76,8 +76,8 @@ const successHandler = (response) => {
 }
 
 const client = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL
-  // baseURL: process.env.REACT_APP_BASE_URL_DEBUG
+  // baseURL: process.env.REACT_APP_BASE_URL
+  baseURL: process.env.REACT_APP_BASE_URL_DEBUG
 })
 client.interceptors.request.use((request) => requestHandler(request))
 client.interceptors.response.use(
